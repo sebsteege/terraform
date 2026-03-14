@@ -1,0 +1,4 @@
+.azure_terraform_creds
+azure/.terraform/
+azure/terraform.tfstate.backup
+azure/.terraform.lock.hcl

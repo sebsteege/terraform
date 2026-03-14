@@ -1,0 +1,6 @@
+package_update: true
+package_upgrade: true
+packages:
+  - curl
+runcmd:
+  - ["sh", "/home/ansible/repositories/terraform/azure/install_apache.sh"]

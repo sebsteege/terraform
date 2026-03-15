@@ -1,3 +1,11 @@
+variable "docker_host" {
+  type    = string
+}
+
+variable "docker_admin" {
+  type    = string
+}
+
 variable "db_password" {
   description = "The password for the MySQL and Ghost database"
   type        = string
@@ -27,10 +35,6 @@ variable "ghostdb_volume" {
   type    = string
 }
 
-variable "docker_host" {
-  type    = string
-}
-
-variable "docker_admin" {
+variable "gitea_volume" {
   type    = string
 }

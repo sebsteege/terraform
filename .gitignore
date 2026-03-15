@@ -4,4 +4,8 @@ azure/terraform.tfstate.backup
 azure/terraform.tfstate
 azure/.terraform.lock.hcl
 .docker_terraform_creds
-docker/
+docker/.terraform/
+docker/terraform.tfstate.backup
+docker/terraform.tfstate
+docker/.terraform.lock.hcl
+docker/terraform.tfvars

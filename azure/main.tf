@@ -1,21 +1,13 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-      version = ">= 4.64.0"
-    }
-    cloudinit = {
-      source = "hashicorp/cloudinit"
-      version = "=2.3.7"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "rg" {
-  name = "lab_rg"
-  location = "eastus2"
+  name = var.resource_group_name
+  location = var.location
+}
+
+module "azure_networking" {
+  source = "./modules/azure_networking"
+  resource_group_name = azurerm_resource_group.rg.name
+  location = azurerm_resource_group.rg.location
+  vnet_configuration = var.vnet_configuration
+  subnet_configuration = var.subnet_configuration
+  az_firewall_configuration = var.az_firewall_configuration
 }

@@ -36,20 +36,43 @@ resource "azurerm_firewall" "az-firewall" {
   }
 }
 
-/*
-resource "azurerm_route_table" "firewall_route_table" {
-  name                = var.firewall_route_table.name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+resource "azurerm_route_table" "firewall_default_rt" {
+  name                = "default_route_to_firewall"
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   route {
     name           = "default_to_firewall"
-    address_prefix = "10.1.0.0/16"
-    next_hop_type  = "VnetLocal"
-  }
-
-  tags = {
-    environment = "Production"
+    address_prefix = "0.0.0.0/0"
+    next_hop_type  = "VirtualAppliance"
+    next_hop_in_ip_address = azurerm_firewall.az-firewall.ip_configuration[0].private_ip_address
   }
 }
-*/
+
+resource "azurerm_subnet_route_table_association" "subnet_default_rt_ass" {
+  for_each       = { for k, v in var.subnet_configuration : k=> v if v.vnet != "hub_vnet" }
+  subnet_id      = azurerm_subnet.subnet[each.value.name].id
+  route_table_id = azurerm_route_table.firewall_default_rt.id
+}
+
+resource "azurerm_virtual_network_peering" "hub-to-spoke" {
+  for_each                  = { for k, v in var.vnet_configuration : k => v if v.name != "hub_vnet" }
+  name                      = "hub-to-${each.value.name}-peering"
+  resource_group_name       = var.resource_group_name
+  virtual_network_name      = azurerm_virtual_network.vnet["hub_vnet"].name
+  remote_virtual_network_id = azurerm_virtual_network.vnet[each.value.name].id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+  allow_gateway_transit = true
+}
+
+resource "azurerm_virtual_network_peering" "spoke-to-hub" {
+  for_each                  = { for k, v in var.vnet_configuration : k => v if v.name != "hub_vnet" }
+  name                      = "${each.value.name}-to-hub-peering"
+  resource_group_name       = var.resource_group_name
+  virtual_network_name      = azurerm_virtual_network.vnet[each.value.name].name
+  remote_virtual_network_id = azurerm_virtual_network.vnet["hub_vnet"].id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+  use_remote_gateways = false
+}

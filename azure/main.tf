@@ -10,4 +10,7 @@ module "azure_networking" {
   vnet_configuration = var.vnet_configuration
   subnet_configuration = var.subnet_configuration
   az_firewall_configuration = var.az_firewall_configuration
+  lng_configuration = var.lng_configuration
+  vng_configuration = var.vng_configuration
+  vng_connection_settings = var.vng_connection_settings
 }

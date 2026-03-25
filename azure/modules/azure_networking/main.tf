@@ -50,6 +50,38 @@ resource "azurerm_firewall" "az-firewall" {
 }
 
 # ============================================================================ #
+#                  Azure Firewall Rule Configuration                           #
+# ============================================================================ #
+
+resource "azurerm_firewall_network_rule_collection" "firewall_rule" {
+  name                = "default_permit_policy"
+  azure_firewall_name = azurerm_firewall.az-firewall.name
+  resource_group_name = var.resource_group_name
+  priority            = 100
+  action              = "Allow"
+
+  rule {
+    name = "default_permit_policy"
+
+    source_addresses = [
+      "10.0.0.0/8","192.168.0.0/16","172.16.0.0/12"
+    ]
+
+    destination_ports = [
+      "22",
+    ]
+
+    destination_addresses = [
+      "10.0.0.0/8","192.168.0.0/16","172.16.0.0/12"
+    ]
+
+    protocols = [
+      "TCP",
+    ]
+  }
+}
+
+# ============================================================================ #
 #                           Azure UDR Configuration                            #
 # ============================================================================ #
 
@@ -63,6 +95,15 @@ resource "azurerm_route_table" "firewall_default_rt" {
     address_prefix = "0.0.0.0/0"
     next_hop_type  = "VirtualAppliance"
     next_hop_in_ip_address = azurerm_firewall.az-firewall.ip_configuration[0].private_ip_address
+  }
+  dynamic "route" {
+    for_each         = var.on-prem_nets
+    content {
+      name           = route.key
+      address_prefix = route.value
+      next_hop_type  = "VirtualAppliance"
+      next_hop_in_ip_address = azurerm_firewall.az-firewall.ip_configuration[0].private_ip_address
+    }
   }
 }
 
@@ -116,7 +157,7 @@ resource "azurerm_virtual_network_peering" "spoke-to-hub" {
   remote_virtual_network_id = azurerm_virtual_network.vnet["hub_vnet"].id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
-  use_remote_gateways = false
+  use_remote_gateways = true
 }
 
 # ============================================================================ #

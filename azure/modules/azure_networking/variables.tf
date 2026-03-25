@@ -59,6 +59,11 @@ variable "az_firewall_configuration" {
 #                        Azure On-Prem VPN Variables                           #
 # ============================================================================ #
 
+variable "on-prem_nets" {
+  description = "On Prem networks"
+  type = map(string)
+}
+
 variable "lng_configuration" {
   description = "Configuration for Local Network Gateways"
   type = map(object({

@@ -1,3 +1,4 @@
+# variables.tf
 # ============================================================================ #
 #                   Azure Resource Group and Region Variables                  #
 # ============================================================================ #
@@ -31,4 +32,9 @@ variable "linux_vm_configuration" {
     admin_username   = string
     key_file         = string
   }))
+}
+
+variable "networking_subnet_ids" {
+  description = "Map of subnet IDs passed from the networking module"
+  type        = map(string)
 }

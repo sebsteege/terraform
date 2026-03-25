@@ -1,3 +1,4 @@
+# main.tf
 resource "azurerm_public_ip" "vm-pub-ip" {
   for_each = var.linux_vm_configuration
   name = "${each.value.name}-pubip"
@@ -12,14 +13,11 @@ resource "azurerm_network_interface" "vm-nic" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  dynamic "ip_configuration" {
-    for_each = var.linux_vm_configuration
-    content {
-      name                          = "internal"
-      subnet_id                     = ip_configuration.value.subnet
-      private_ip_address_allocation = "Dynamic"
-      public_ip_address_id          = azurerm_public_ip.vm-pub-ip[each.key].id
-    }
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = var.networking_subnet_ids[each.value.subnet]
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.vm-pub-ip[each.key].id
   }
 }
 

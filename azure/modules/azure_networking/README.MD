@@ -15,3 +15,15 @@ This module automates the deployment of a hardened network topology in Azure. It
     Azure Subscription: Owner or Network Contributor permissions.
 
     On-Premises VPN Device: Required for site-to-site tunnel completion (BGP support recommended).
+
+## Dependencies
+
+    Terraform: v1.14.7+
+
+    AzureRM Provider: >= 4.64.0
+
+    Azure Subscription: Owner or Network Contributor permissions.
+
+    On-Premises VPN Device: Required for site-to-site tunnel completion (BGP support recommended).
+
+    This project will require you to create a terraform.tfvars in the root of the directory where the values for variables will be defined.

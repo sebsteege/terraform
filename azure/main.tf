@@ -13,13 +13,13 @@ module "azure_networking" {
   lng_configuration = var.lng_configuration
   vng_configuration = var.vng_configuration
   vng_connection_settings = var.vng_connection_settings
+  on-prem_nets = var.on-prem_nets
 }
 
-/*
 module "azure_linux" {
   source = "./modules/azure_linux"
   resource_group_name = azurerm_resource_group.rg.name
   location = azurerm_resource_group.rg.location
   linux_vm_configuration = var.linux_vm_configuration
+  networking_subnet_ids = module.azure_networking.subnets
 }
-*/

@@ -106,3 +106,25 @@ variable "vng_connection_settings" {
     })))
   })
 }
+
+# ============================================================================ #
+#                               Interface NSG Confiugration                    #
+# ============================================================================ #
+
+
+
+# ============================================================================ #
+#                               Virtual Machine Confiugration                  #
+# ============================================================================ #
+/*
+variable "linux_vm_configuration" {
+  description = "Configuration for linux virtual machines"
+  type = map(object({
+    name             = string
+    subnet           = string
+    size             = string
+    admin_username   = string
+    key_file         = string
+  }))
+}
+*/

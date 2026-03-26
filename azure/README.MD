@@ -6,7 +6,7 @@ This repository contains a Terraform-based framework for deploying a secure, aut
 
 The project is organized into functional modules to separate core connectivity from compute resources:
 
-    azure_networking: Manages the VNet topology, CIDR boundaries, Peerings, Azure Firewall, and the S2S VPN Gateway (e.g., connection to a local pfSense/CVLab).
+    azure_networking: Manages the VNet topology, CIDR boundaries, Peerings, Azure Firewall, and the S2S VPN Gateway (e.g., connection to a local pfSense/firewall).
 
     azure_linux: Manages the deployment of Ubuntu 22.04 LTS instances, including Static Public IPs, Network Interfaces, and SSH-specific Security Groups.
 
